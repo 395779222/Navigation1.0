@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CompanyInfo">
+	<typeAlias alias="CompanyInfo" type="cn.eainfo.navigation.po.CompanyInfo" />
+	<typeAlias alias="CompanyInfoModel"
+		type="cn.eainfo.navigation.model.CompanyInfoModel" />
+	<select id="getBean" parameterClass="long"
+		resultClass="CompanyInfo">
+		SELECT * from SysCompanyInfo where id=#id#
+	</select>
+	 <select id="getCompanyInfoCount" resultClass="long"
+		parameterClass="CompanyInfoModel">
+		SELECT count(*) from SysCompanyInfo  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="districtName">
+				(districtName like '%$districtName$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo in (select areaNo from sysarea where (areaNo=#areaNo# or superArea=#areaNo#)) )
+			</isNotEmpty>
+		</dynamic> 
+ </select>
+	<select id="getCompanyInfoRecord" parameterClass="CompanyInfoModel"
+		resultClass="CompanyInfo">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from SysCompanyInfo  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="districtName">
+				(districtName like '%$districtName$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo in (select areaNo from sysarea where (areaNo=#areaNo# or superArea=#areaNo#)) )
+			</isNotEmpty>
+		</dynamic> 
+		order by areaNo
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	<insert id="insert" parameterClass="CompanyInfo">
+		insert into SysCompanyInfo
+		  (id,districtCode,districtName,areaNo)
+		values
+		(SYSCOMPANYINFO_SEQ.Nextval,#districtCode#,#districtName#,#areaNo#)
+	</insert>
+	<update id="update" parameterClass="CompanyInfo">
+		update SysCompanyInfo set
+	  districtCode=#districtCode#,districtName=#districtName#,areaNo=#areaNo#
+		where  id=#id#
+	</update>
+	 <delete id="delete" parameterClass="long">
+		delete from sysCompanyInfo
+		where  id=#id#
+	</delete>
+</sqlMap>

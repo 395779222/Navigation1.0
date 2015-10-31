@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="Shortcuts">
+	<typeAlias alias="shortcuts" type="cn.eainfo.navigation.po.Shortcuts" />
+	<typeAlias alias="shortcutsModel"
+		type="cn.eainfo.navigation.model.ShortcutsModel" />
+	<select id="getBean" parameterClass="long"
+		resultClass="shortcuts">
+		SELECT * from shortcuts where id=#id#
+	</select>
+	 <select id="getShortcutsCount" resultClass="long"
+		parameterClass="shortcutsModel">
+		SELECT count(*) from shortcuts  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="type">
+				( type like '%$type$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				( areaNo in (select areaNo from sysarea where (areaNo=#areaNo# or superArea=#areaNo#)) ) 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="checkState">
+				( checkState like '%$checkState$%') 
+			</isNotEmpty>
+		</dynamic> 
+ </select>
+	<select id="getShortcutsRecord" parameterClass="shortcutsModel"
+		resultClass="shortcuts">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from shortcuts  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="type">
+				(type like '%$type$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				( areaNo in (select areaNo from sysarea where (areaNo=#areaNo# or superArea=#areaNo#)) ) 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="checkState">
+				( checkState like '%$checkState$%') 
+			</isNotEmpty>
+		</dynamic> 
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	<insert id="insert" parameterClass="shortcuts">
+		insert into shortcuts
+		  (id,url,namena,icon,key,type,areaNo,checkState)
+		values
+		(SHORTCUTS_SEQ.Nextval,#url#,#namena#,#icon#,#key#,#type#,#areaNo#,#checkState#)
+	</insert>
+	<update id="update" parameterClass="shortcuts">
+		update shortcuts set
+	  url=#url#,namena=#namena#,icon=#icon#,key=#key#,type=#type#,areaNo=#areaNo#,checkState=#checkState#
+		where  id=#id#
+	</update>
+	 <delete id="delete" parameterClass="long">
+		delete from shortcuts where id=#id#
+	</delete>
+	
+	<select id="getShortByType" parameterClass="shortcuts"
+		resultClass="shortcuts">
+		select * from shortcuts n left join sysArea s on n.areaNo=s.areaNo 
+			where n.type=#type# and s.enname=#areaNo# and n.key&lt;4
+	</select>
+	<select id="getShortAdIcon" parameterClass="shortcuts" resultClass="shortcuts">
+		select * from shortcuts n left join sysArea s on n.areaNo=s.areaNo 
+			where n.type=#type# and s.enname=#areaNo# and n.key=4
+	</select>
+	<select id="getCheckNum" parameterClass="shortcuts" resultClass="long">
+		select count(*) from shortcuts where type=#type# and areaNo=#areaNo# and checkState&lt;&gt;'审核通过'
+	</select> 
+	<select id="getNotCheckNum" parameterClass="shortcuts" resultClass="long">
+		select count(*) from shortcuts where type=#type# and areaNo=#areaNo# and checkState='审核通过'
+	</select> 
+	<select id="getNotPassedNum"  parameterClass="shortcuts" resultClass="long">
+		select count(*) from shortcuts where type=#type# and areaNo=#areaNo# 
+		and(checkState='待审核' or checkState='审核不通过')
+	</select>
+	<select id="getPreLookShorts" parameterClass="shortcuts" resultClass="shortcuts">
+		select * from shortcuts where areaNo=#areaNo# and type=#type# and key&lt;4
+	</select>
+	<select id="getPreLookShortAdIcon" parameterClass="shortcuts" resultClass="shortcuts">
+		select * from shortcuts where areaNo=#areaNo# and type=#type# and key=4
+	</select>
+	<select id="getAllNum" parameterClass="shortcuts" resultClass="long">
+		select count(*) from shortcuts where areaNo=#areaNo# and type=#type#
+	</select>
+	<update id="updateShortByCheck" parameterClass="shortcuts">
+		update shortcuts set checkState=#checkState# where areaNo=#areaNo# and type=#type#
+	</update>
+	<select id="getKeyIsExist" parameterClass="shortcuts" resultClass="long">
+		select count(*) from shortcuts where areaNo=#areaNo# and type=#type# and key=#key#
+	</select>
+</sqlMap>

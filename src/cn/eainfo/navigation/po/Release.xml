@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="Release">
+	<typeAlias alias="release" type="cn.eainfo.navigation.po.Release" />
+	<typeAlias alias="releaseModel" type="cn.eainfo.navigation.model.ReleaseModel" />
+	<select id="getBean" parameterClass="long"
+		resultClass="release">
+		SELECT * from release where id=#id#
+	</select>
+	<select id="getReleaseByType" parameterClass="String"
+		resultClass="release">
+		SELECT * from release where type=#type# and deleteFlag='正常'
+	</select>
+	 <select id="getReleaseCount" resultClass="long"
+		parameterClass="releaseModel">
+		SELECT count(*) from release  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="name">
+				( name like '%$name$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="type">
+				(type like '%$type$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '%$areaNo$%' )
+			</isNotEmpty>
+			
+		</dynamic> 
+ </select>
+	<select id="getReleaseRecord" parameterClass="releaseModel"
+		resultClass="release">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from release  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="name">
+				( name like '%$name$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="type">
+				(type like '%$type$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '%$areaNo$%' )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="deleteFlag">
+				(deleteFlag like '%$deleteFlag$%' )
+			</isNotEmpty>
+		</dynamic> 
+		order by type
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	<insert id="insert" parameterClass="release">
+		insert into release
+		  (id,name,ip,port,userName,pass,address,type,url,areaNo,deleteFlag)
+		values
+		(RELEASE_SEQ.Nextval,#name#,#ip#,#port#,#userName#,#pass#,#address#,#type#,#url#,#areaNo#,#deleteFlag#)
+	</insert>
+	<update id="update" parameterClass="release">
+		update release set deleteFlag=#deleteFlag#,name=#name#,ip=#ip#,port=#port#,userName=#userName#,pass=#pass#,address=#address#,type=#type#,url=#url#
+		where  id=#id#
+	</update>
+	 <delete id="delete" parameterClass="long">
+		update release set deleteFlag='注销'  where id=#id#
+	</delete>
+	<select id="getExportRelease" parameterClass="release" resultClass="java.util.HashMap">
+		select * from release order by type 
+	</select>
+	<delete id="deleteAll" parameterClass="String">
+		delete from release
+	</delete>
+</sqlMap>

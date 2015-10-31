@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="profiler.settings.instrument.empty.methods">true</entry>
+<entry key="ProfilerCPUSettings_profile_runnables">true</entry>
+<entry key="profiler.settings.n.profiled.threads.limit">32</entry>
+<entry key="ProfilerCPUSettings_filter_type">2</entry>
+<entry key="profiler.settings.obj.alloc.stack.sampling.depth">-1</entry>
+<entry key="profiler.settings.instrument.method.invoke">true</entry>
+<entry key="profiler.settings.instr.scheme">1</entry>
+<entry key="ProfilerMemorySettings_track_every">10</entry>
+<entry key="ProfilerMemorySettings_mode">4</entry>
+<entry key="ProfilerCPUSettings_root_classes">cn.eainfo.common.**
+cn.eainfo.ibatistools.**
+cn.eainfo.navigation.action.**
+cn.eainfo.navigation.model.**
+cn.eainfo.navigation.po.**
+cn.eainfo.navigation.service.**
+cn.eainfo.spinfo.action.**
+cn.eainfo.spinfo.model.**
+cn.eainfo.spinfo.po.**
+cn.eainfo.spinfo.service.**
+cn.eainfo.system.action.**
+cn.eainfo.system.model.**
+cn.eainfo.system.po.**
+cn.eainfo.system.service.**
+</entry>
+<entry key="ProfilerCPUSettings_filter_value">cn.eainfo.common.*,&#13;
+cn.eainfo.ibatistools.*,&#13;
+cn.eainfo.navigation.action.*,&#13;
+cn.eainfo.navigation.model.*,&#13;
+cn.eainfo.navigation.po.*,&#13;
+cn.eainfo.navigation.service.*,&#13;
+cn.eainfo.spinfo.action.*,&#13;
+cn.eainfo.spinfo.model.*,&#13;
+cn.eainfo.spinfo.po.*,&#13;
+cn.eainfo.spinfo.service.*,&#13;
+cn.eainfo.system.action.*,&#13;
+cn.eainfo.system.model.*,&#13;
+cn.eainfo.system.po.*,&#13;
+cn.eainfo.system.service.*</entry>
+<entry key="profiler.settings.istrument.getter.setter.methods">true</entry>
+<entry key="myeclipse.profiling.mode">0</entry>
+<entry key="ProfilerMemorySettings_stacktraces">-1</entry>
+<entry key="profiler.settings.sampling.interval">10</entry>
+<entry key="profiler.settings.cpu.profiling.type">0</entry>
+</properties>

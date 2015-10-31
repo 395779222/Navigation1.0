@@ -1,0 +1,269 @@
+
+package cn.eainfo.navigation.service.impl;
+
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import cn.eainfo.common.file.CommonFileUtils;
+import cn.eainfo.common.file.PropertiesFile;
+import cn.eainfo.navigation.po.Natest;
+import cn.eainfo.navigation.po.Navigation;
+import cn.eainfo.navigation.po.Release;
+import cn.eainfo.navigation.service.ReleaseNavigationService;
+import cn.eainfo.system.po.SysArea;
+import org.springframework.orm.ibatis.SqlMapClientTemplate;
+
+
+/**
+ * <导航发布信息实现类>
+ * @author  导航信息发布
+ * @version  [版本号, 2014-4-4]
+ * @see  [相关类/方法]
+ * @since  [产品/模块版本]
+ */
+public class ReleaseNavigationServiceImpl implements ReleaseNavigationService{
+	private Logger logger = Logger.getLogger(this.getClass().getName());
+	@Autowired
+	private SqlMapClientTemplate sqlMapClientTemplate;
+	
+	/** 生成指定的index.jsp页面
+	 *  */
+	public boolean generateIndexJsp( String areaNo){
+		boolean flag = false;
+		logger.log(Level.INFO, " generateIndexJsp() BEGIN");
+		List<Navigation> navigationList =  new ArrayList<Navigation>();
+	
+		StringBuffer strBuffer = new StringBuffer();
+		strBuffer.append("<html xmlns=\"http://www.w3.org/1999/xhtml\">  "+"\n");
+		strBuffer.append("<%@page import=\"cn.eainfo.navigation.action.CustomerInfoAction\"%>   "+"\n");
+		strBuffer.append("<%@page import=\"java.net.URLEncoder\"%>   "+"\n");
+		strBuffer.append("<%@page language=\"java\" contentType=\"text/html; charset=GBK\"pageEncoding=\"GBK\"%>   "+"\n");
+		strBuffer.append("<head>"+"\n");
+		strBuffer.append("<script type=\"text/javascript\" src=\"<%=request.getContextPath()%>/newstyle/easyui/jquery.js\"></script>   "+"\n");
+		strBuffer.append("</head>" +"\n");
+		strBuffer.append("<script type=\"text/javascript\">" +"\n");
+		//定义异步取卡号的方法
+		strBuffer.append("function getUserCity(cardNo){"+"\n");
+		strBuffer.append("  var userCityName = \"\";"+"\n");
+		//strBuffer.append("	var dataInfo = {cardNo:cardNo};"+"\n");
+		strBuffer.append("	$.ajax({"+"\n");
+		strBuffer.append("		async:false,"+"\n");
+		strBuffer.append("		type: \"post\","+"\n");
+		//strBuffer.append("		data: dataInfo,"+"\n");
+		strBuffer.append("		url: \"<%=request.getContextPath()%>/navigation/customerInfo!getUserCityName?cardNo=\"+cardNo,"+"\n");
+		strBuffer.append("		dataType: \"json\","+"\n");
+		strBuffer.append("		success: function(data) {"+"\n");
+		strBuffer.append("			if (data.result != 'success') {"+"\n");
+		strBuffer.append("				$.messager.alert('消息提醒', data.resume, 'warning');"+"\n");
+		strBuffer.append("				userCityName = \"emergency\";"+"\n");
+		
+		strBuffer.append("			}"+"\n");
+		strBuffer.append("			else{"+"\n");
+		strBuffer.append("				userCityName = data.resume;"+"\n");
+		strBuffer.append("			}"+"\n");
+		strBuffer.append("		}"+"\n");
+		strBuffer.append("		});"+"\n");
+		strBuffer.append("		return userCityName;"+"\n");
+		strBuffer.append("}"+"\n");
+		strBuffer.append("window.onload=function(){"+"\n");
+		//获取卡号
+		strBuffer.append("	var caSerialNum = CA.serialNumber;" +"\n");	
+		strBuffer.append("	caSerialNum = caSerialNum.substr(0,15);" +"\n");
+		strBuffer.append("	var host = window.location.hostname ;  " +"\n");
+		//ajax调用后台取得地区信息
+		strBuffer.append("	if(host.indexOf(\"hdtvinfo.jsamtv.com\")>-1) {    "+"\n");
+		strBuffer.append("		var enCityName = getUserCity(caSerialNum);   "+"\n");
+		strBuffer.append("		window.location.href=\"<%=request.getContextPath()%>/Root/\"+enCityName+\"/index_\"+enCityName+\"_hd.jsp\";"+"\n");
+		strBuffer.append("	}" +"\n");
+		strBuffer.append("	if(host.indexOf(\"sdtvinfo.jsamtv.com\")>-1) {    "+"\n");
+		strBuffer.append("		var enCityName = getUserCity(caSerialNum);   "+"\n");
+		strBuffer.append("		window.location.href=\"<%=request.getContextPath()%>/Root/\"+enCityName+\"/index_\"+enCityName+\"_sd.jsp\";"+"\n");
+		strBuffer.append("	}" +"\n");
+		/*strBuffer.append("	else{ "+"\n");
+		 *strBuffer.append("		window.location.href=\"http://172.31.135.24/Navigation1.0/Root/index2.jsp\";"+"\n");
+		 *strBuffer.append("	} "+"\n");
+		*/
+		//调用java代码
+		strBuffer.append("	<%" +"\n");
+		strBuffer.append("		String host = request.getHeader(\"host\"); " +"\n");
+		strBuffer.append("		String op = request.getParameter(\"op\"); " +"\n");
+		
+		strBuffer.append("		if(host == null) { " +"\n");
+		strBuffer.append("			response.sendRedirect(\"http://172.31.135.24/Navigation1.0/Root/emergency/index_emergency_hd.jsp\"); " +"\n");
+		strBuffer.append("		}" +"\n");
+		strBuffer.append("		else if(host.indexOf(\"sdtvinfo.jsamtv.com\")>-1) { " +"\n");
+		strBuffer.append("		}" +"\n");
+		strBuffer.append("		else if(host.indexOf(\"hdtvinfo.jsamtv.com\")>-1) { " +"\n");
+		strBuffer.append("		}" +"\n");
+		
+		navigationList = getToRealseList();
+		if(navigationList!=null&&navigationList.size()>0){
+			for(int i=0;i<navigationList.size();i++){
+				Navigation navigaTion=navigationList.get(i);
+				if(navigaTion.getDomain()!= null &&  !navigaTion.getDomain().equals("") && !navigaTion.getDomain().equals("null")){
+					strBuffer.append("		else if(host.indexOf(\""+navigaTion.getDomain()+"\")>-1 ) {"+"\n");
+					strBuffer.append(" 			response.sendRedirect(\""+navigaTion.getRedirect()+"\"); "+"\n");
+					strBuffer.append("		}"+"\n");
+				}
+			}	
+			
+		}
+		//嵌套java代码结束
+		strBuffer.append("	%>" +"\n");
+		//js代码 onload结束
+		strBuffer.append("}"+"\n");
+		strBuffer.append("</script>"+"\n");
+		strBuffer.append("<body>" +"\n");
+		strBuffer.append("</body>"+"\n");
+		strBuffer.append("</html>");
+		
+		 //String path = PropertiesFile.getPropertiesValueByName("serviceIndexAddress");
+		String path = PropertiesFile.getPropertiesValueByName("serviceIndexAddress");
+		 File f = new File(path);
+	     BufferedWriter o;
+		try {
+			CommonFileUtils.createFile(f, true);
+			o = new BufferedWriter(new FileWriter(f));
+			o.write(strBuffer.toString()); 
+		    o.close(); 
+		    logger.log(Level.INFO, " index.jsp生成的地址为："+path);
+		    logger.log(Level.INFO, " generateIndexJsp() end");
+		} catch (IOException e) {
+			logger.log(Level.ERROR, " generateIndexJsp() 生成index.jsp失败 ",e);
+			e.printStackTrace();
+		} finally{	
+		}
+		return flag;
+	}
+	
+	
+	/** 
+	 * <获取导航发布列表>
+	 * @param areaNo
+	 * @return
+	 * @see [类、类#方法、类#成员]
+	 */
+	private List<Navigation> getToRealseList() {
+		@SuppressWarnings("unchecked")
+		List<Navigation>list = (List<Navigation>) sqlMapClientTemplate.queryForList(
+				"Navigation.getRealseList", "ww");
+		return list;
+	}
+
+	/** 
+	 * <获得可以发布的导航列表>
+	 * @param areaNo
+	 * @return
+	 * @see [类、类#方法、类#成员]
+	 */
+	public  List<String>  getCityName(String areaNo) {
+		List<String> listStr = new ArrayList<String>();
+		@SuppressWarnings("unchecked")
+		List<SysArea>areaList =  sqlMapClientTemplate.queryForList(
+				"SysArea.getBeanByAreaNo", areaNo);
+		if(areaList!=null&&areaList.size()>0){
+			for(SysArea sysArea:areaList){
+				//去掉江苏只要取得市拼音就好
+				if(!sysArea.getEnName().equals("jiangsu")){
+					listStr.add(sysArea.getEnName());
+				}
+			}
+		}
+		else{
+			listStr.add("nanjing");
+		}
+		return listStr;
+	}
+
+	/** 
+	 * <根据导航的类型及所属地区获取可以发布的导航列表，在生成index_cityName_type.jsp用到>
+	 * @return
+	 * @see [类、类#方法、类#成员]
+	 */
+	//注：这里导航的地区编号其实是enName(即nanjing)因为一个编号唯一对应enName
+	public List<Navigation> getNavigationRealse(Navigation navigation) {
+		@SuppressWarnings("unchecked")
+		List<Navigation>list = sqlMapClientTemplate.queryForList("Navigation.getRealseListByEnNameAndType", navigation);
+		return list;
+	}
+
+
+	/** 生成各地市高标清首页 */
+	 
+	public boolean JspToHtmlByURL(String u, String path) {
+		logger.log(Level.INFO, " JspToHtmlByURL() BEGIN");
+		//从utl中读取html存为str 
+        InputStream is = null;
+        FileOutputStream out = null;
+        try { 
+            URL url = new URL(u); 
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();  
+            //URLConnection uc = url.openConnection(); 
+            conn.setRequestMethod("GET");  
+            conn.setDoInput(true);  
+            conn.setDoOutput(true);  
+            conn.setInstanceFollowRedirects(true);  
+            conn.setRequestProperty("content-type", "text/html"); 
+            //设置编码
+            //conn.setRequestProperty("Accept-Charset", "utf-8");
+           // conn.setRequestProperty("contentType", "utf-8");
+            conn.connect();// 握手  
+           // PrintWriter out = new PrintWriter(new OutputStreamWriter(conn.getOutputStream(),"utf-8"));  
+           //获取nanjing_hd的输入流
+            is = conn.getInputStream(); 
+            //File f = new File(path); 
+            out =  new FileOutputStream(path);
+            //因为从jsp文件获取的二进制流不包含页面编码的控制因此新生成的jsp页面就没有编码控制，因此在生成的jsp页面上加上此控制
+            String str2 = "<%@ page language=\"java\" pageEncoding=\"UTF-8\"%><%@ page contentType=\"text/html;charset=UTF-8\"%>";
+            out.write(str2.getBytes());
+            byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = is.read(buffer)) > 0) {
+	        	//写入文件
+	        	out.write(buffer, 0, len);
+	        }       
+	        is.close();
+        	out.close();
+        	logger.log(Level.INFO, " JspToHtmlByURL() end");
+            return true; 
+        } catch (Exception e) { 
+        	logger.log(Level.ERROR, " JspToHtmlByURL() 出错！！！！！！！！！！！！！！！！！！！！！");
+        	e.printStackTrace(); 
+            return false; 
+        } 
+		
+	}
+
+
+	/** 
+	 * <功能详细描述>
+	 * @param type
+	 * @return
+	 * @see [类、类#方法、类#成员]
+	 */
+	public List<Natest> getTest(String type) {
+		@SuppressWarnings("unchecked")
+		List<Natest>list = (List<Natest>) sqlMapClientTemplate.queryForList(
+				"Navigation.getNatestByType", type);
+		return list;
+	}
+	
+	/** 通过类型获取服务器列表 */
+	public List<Release> getServerList(String type) {
+		@SuppressWarnings("unchecked")
+		List<Release>list = (List<Release>) sqlMapClientTemplate.queryForList("Release.getReleaseByType", type);
+		return list;
+	}
+
+}

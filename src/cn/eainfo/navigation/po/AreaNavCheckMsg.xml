@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="AreaNavCheckMsg">
+	<typeAlias alias="areaNavCheckMsg" type="cn.eainfo.navigation.po.AreaNavCheckMsg" />
+	<typeAlias alias="areaNavCheckMsgModel"
+		type="cn.eainfo.navigation.model.AreaNavCheckMsgModel" />
+	<select id="getBean" parameterClass="String"
+		resultClass="areaNavCheckMsg">
+		SELECT * from areaNavCheckMsg where id=#id#
+	</select>
+	 <select id="getAreaNavCheckMsgCount" resultClass="long"
+		parameterClass="areaNavCheckMsgModel">
+		SELECT count(*) from areaNavCheckMsg  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="checkState">
+				(checkState like '%$checkState$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="type">
+				(type like '%$type$%') 
+			</isNotEmpty>
+		</dynamic>
+		
+ </select>
+	<select id="getAreaNavCheckMsgRecord" parameterClass="areaNavCheckMsgModel"
+		resultClass="areaNavCheckMsg">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from areaNavCheckMsg  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="checkState">
+				(checkState like '%$checkState$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="type">
+				(type like '%$type$%') 
+			</isNotEmpty>
+		</dynamic>
+		order by areaNo
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	<insert id="insert" parameterClass="areaNavCheckMsg">
+		insert into areaNavCheckMsg
+		  (id,areaNo,isToCheckNum,isNotToCheckNum,checkText,checkState,type,shortCheckNum,shortNotCheckNum)
+		values
+		(AREANAVCHECKMSG_SEQ.Nextval,#areaNo#,#isToCheckNum#,#isNotToCheckNum#,#checkText#,#checkState#,#type#,#shortCheckNum#,#shortNotCheckNum#)
+	</insert>
+	<update id="update" parameterClass="areaNavCheckMsg">
+		update areaNavCheckMsg set isToCheckNum=#isToCheckNum#,isNotToCheckNum=#isNotToCheckNum#,checkText=#checkText#,checkState=#checkState#,shortCheckNum=#shortCheckNum#
+		where  areaNo=#areaNo# and type=#type#
+	</update>
+	<update id="updateShortCheckNum" parameterClass="areaNavCheckMsg">
+		update areaNavCheckMsg set shortCheckNum=#shortCheckNum#,shortNotCheckNum=#shortNotCheckNum#,checkState=#checkState# where  areaNo=#areaNo# and type=#type#
+	</update>
+	 
+</sqlMap>

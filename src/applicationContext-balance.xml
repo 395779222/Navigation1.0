@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	<bean name="sysMaxIdService" class="cn.eainfo.system.service.impl.SysMaxIdServiceImpl">
+	</bean>
+	<bean name="sysUserService" class="cn.eainfo.system.service.impl.SysUserServiceImpl">
+	</bean>
+	<bean name="sysMenuService" class="cn.eainfo.system.service.impl.SysMenuServiceImpl">
+	</bean>
+	<bean name="sysRoleService" class="cn.eainfo.system.service.impl.SysRoleServiceImpl">
+	</bean>
+	<bean name="sysAreaService" class="cn.eainfo.system.service.impl.SysAreaServiceImpl">
+	</bean>
+
+	<!-- spxinxi -->
+	<bean name="spInfoService" class="cn.eainfo.spinfo.service.impl.SpInfoServiceImpl">
+	</bean>
+	<bean name="loginLogService" class="cn.eainfo.system.service.impl.LoginLogServiceImpl">
+	</bean>
+	<!-- excel导出 -->
+	<!-- json错误处理 -->
+	<bean name="jsonObjectTool" class="cn.eainfo.common.JSONObjectTool">
+	</bean>
+	<!-- 导航信息 -->
+	<bean name="navigationService" class="cn.eainfo.navigation.service.impl.NavigationServiceImpl">
+	</bean>
+	<bean name="releaseNavigationService" class="cn.eainfo.navigation.service.impl.ReleaseNavigationServiceImpl">
+	</bean>
+	<bean name="shortcutsService" class="cn.eainfo.navigation.service.impl.ShortcutsServiceImpl">
+	</bean>
+	<bean name="releaseService" class="cn.eainfo.navigation.service.impl.ReleaseServiceImpl">
+	</bean>
+	<bean name="companyInfoService" class="cn.eainfo.navigation.service.impl.CompanyInfoServiceImpl">
+	</bean>
+	<bean name="customerInfoService" class="cn.eainfo.navigation.service.impl.CustomerInfoServiceImpl">
+	</bean>
+	<bean name="areaNavCheckMsgService" class="cn.eainfo.navigation.service.impl.AreaNavCheckMsgServiceImpl">
+	</bean>
+	<bean name="emergencyService" class="cn.eainfo.navigation.service.impl.EmergencyServiceImpl">
+	</bean>
+</beans>

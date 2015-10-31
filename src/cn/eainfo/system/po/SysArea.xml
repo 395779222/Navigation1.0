@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SysArea">
+	<typeAlias alias="sysArea" type="cn.eainfo.system.po.SysArea" />
+	<typeAlias alias="sysAreaModel" type="cn.eainfo.system.model.SysAreaModel" />
+	<select id="getSysAreaBypow" resultClass="sysArea" parameterClass="sysAreaModel">
+		SELECT * from sysArea where areaNo!='00'
+		<dynamic>
+			<isNotEqual prepend="AND" property="powerLevel"
+				compareValue="-1">
+				(powerLevel=#powerLevel# )
+			</isNotEqual>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '$areaNo$%' )
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getSysAreaCount" resultClass="long"
+		parameterClass="sysAreaModel">
+		SELECT count(*) from sysArea
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="name">
+				(name like '%$name$%' )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '$areaNo$%' )
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getSysAreaRecord" parameterClass="sysAreaModel"
+		resultClass="sysArea">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from sysArea
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="name">
+				(name like '%$name$%' )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '$areaNo$%' )
+			</isNotEmpty>
+		</dynamic>
+		order by areaNo
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	
+	<select id="getBean" parameterClass="String" resultClass="sysArea">
+		SELECT * from sysArea where areaNo=#areaNo#
+	</select>
+	<select id="getAll" resultClass="sysArea">
+		SELECT * from sysArea 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '$areaNo$%' )
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="getByAreaNo" parameterClass="String" resultClass="sysArea">
+		SELECT * from sysArea where name like '%'||#name#||'%'
+	</select>
+	<select id="getLoginArea" parameterClass="long" resultClass="sysArea">
+		select distinct(sa.areano),sa.areaname from sysArea
+		sa,SysRoleAreaRel
+		sar, SysUserRoleRel sur where
+		sa.areano=sar.areano and
+		sar.roleid=sur.roleid and
+		sur.userid=#userid#
+	</select>
+	<select id="getAreaIdAndName" parameterClass="String"
+		resultClass="sysArea">
+		select areaNo ,name from sysArea where areaNo like '$areaNo$%'		
+	</select>
+	<select id="getAreaByUserId" parameterClass="long" resultClass="sysArea">
+		select distinct(sa.areano),sa.areaname from sysArea
+		sa,SysRoleAreaRel
+		sar, SysUserRoleRel sur where
+		sa.areano=sar.areano and
+		sar.roleid=sur.roleid and
+		length(sa.areano)=4 and sur.userid=#userid#
+	</select>
+	<select id="getBeanByAreaNo" parameterClass="String"
+		resultClass="sysArea">
+		select * from sysArea where areaNo =#areaNo# or superArea=#areaNo#		
+	</select>
+	<select id="getCityEnnameByAreaNo" parameterClass="String"
+		resultClass="sysArea">
+		select * from sysArea where areaNo =#areaNo# 	
+	</select>
+	<insert id="insert" parameterClass="sysArea">
+		insert into sysArea values(#areaNo#,#name#,#areaCode#,#telCount#,#superArea#,#billCycle#,#powerLevel#,#statOrder#,#statOrder1#,#enName#)
+	</insert>
+	<update id="update" parameterClass="sysArea">
+		update sysArea set name=#name#,enName=#enName# where areaNo=#areaNo#
+	</update>
+</sqlMap>

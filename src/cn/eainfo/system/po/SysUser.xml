@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SysUser">
+	<typeAlias alias="sysUser" type="cn.eainfo.system.po.SysUser" />
+	<typeAlias alias="sysUserModel" type="cn.eainfo.system.model.SysUserModel" />
+	<select id="getAll" resultClass="sysUser">
+		SELECT * from sysUser where
+		status=1
+	</select>
+	<select id="userLongin" resultClass="sysUser" parameterClass="sysUserModel">
+		SELECT * from sysUser where loginName=#loginName# and
+		password=#password# and status=1
+	</select>
+	<select id="checkUser" resultClass="sysUser" parameterClass="String">
+		SELECT * from sysUser where loginName=#loginName#
+	</select>
+
+	<select id="getBean" parameterClass="long" resultClass="sysUser">
+		SELECT *
+		from sysUser where userId=#userId#
+	</select>
+	<select id="getSysUserCount" resultClass="long" parameterClass="sysUserModel">
+		SELECT count(*) from sysUser
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="userName">
+				(userName like '%$userName$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="loginName">
+				(loginName like '%$loginName$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="telephone">
+				(telephone like '$telephone$%' )
+			</isNotEmpty>
+			<isNotEqual prepend="AND" property="status" compareValue="0">
+				(status=#status# )
+			</isNotEqual>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '$areaNo$%' )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaCode">
+				(areaNo like '$areaCode$%') 
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="getSysUserRecord" parameterClass="sysUserModel"
+		resultClass="sysUser">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from
+		sysUser
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="userName">
+				(userName like '%$userName$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="loginName">
+				(loginName like '%$loginName$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="telephone">
+				(telephone like '$telephone$%' )
+			</isNotEmpty>
+			<isNotEqual prepend="AND" property="status" compareValue="0">
+				(status=#status# )
+			</isNotEqual>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '$areaNo$%' )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaCode">
+				(areaNo like '$areaCode$%') 
+			</isNotEmpty>
+			order by userId
+		</dynamic>
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	<insert id="insert" parameterClass="sysUser">
+		insert into sysUser
+		(userId,userName,loginName,password,areaNo,telephone,address,status,department,phone,email,identifier,
+		menuselected,updatetime,remark,ip,createTime,openOperator,effectTime,expireTime,loginBeginTime,loginEndTime,
+		maxOnline,adminType,areaLevel)
+		values
+		(#userId#,#userName#,#loginName#,#password#,#areaNo#,#telephone#,#address#,#status#,#department#,#phone#,
+		#email#,#identifier#,#menuselected#,#updatetime#,#remark#,#ip#,#createTime#,#openOperator#,
+		#effectTime#,#expireTime#,#loginBeginTime#,#loginEndTime#,
+		#maxOnline#,#adminType#,#areaLevel#)
+	</insert>
+	<update id="update" parameterClass="sysUser">
+		update sysUser set
+		userName=#userName#,loginName=#loginName#,password=#password#,areaNo=#areaNo#,telephone=#telephone#,
+		address=#address#,status=#status#,department=#department#,phone=#phone#,
+		email=#email#,identifier=#identifier#,menuselected=#menuselected#,updatetime=#updatetime#,remark=#remark#,
+		ip=#ip#,createTime=#createTime#,openOperator=#openOperator#,
+		effectTime=#effectTime#,expireTime=#expireTime#,loginBeginTime=#loginBeginTime#,loginEndTime=#loginEndTime#,
+		maxOnline=#maxOnline#,adminType=#adminType#,areaLevel=#areaLevel#
+		where userId=#userId#
+	</update>
+	<select id="getUserRoleName" resultClass="cn.eainfo.system.po.SysRole" parameterClass="long">
+		select * from sysRole r left join sysUserRolerel ur on r.roleId=ur.roleId where ur.userId=#id#
+	</select>
+</sqlMap>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="Checkphone">
+	<typeAlias alias="checkphone" type="cn.eainfo.system.po.Checkphone" />
+	<typeAlias alias="checkphoneModel"
+		type="cn.eainfo.system.model.CheckphoneModel" />
+		
+	<select id="getCheckphone" resultClass="checkphone">
+	    <![CDATA[
+		SELECT * from CHECKPHONE where accountid=#accountid# and crrstate=#crrstate# and 
+		to_char(current_date,'yyyy-mm-dd hh24:mi:ss')<to_char(sendtime+1/24,'yyyy-mm-dd hh24:mi:ss') order by sendtime desc
+		]]>
+	</select>
+	 <insert id="insert" parameterClass="checkphone">
+		insert into CHECKPHONE
+		(id,accountid,checkphonepwd,sendmessage,sendtime,sendstate,crrstate)
+		values
+		(#id#,#accountid#,#checkphonepwd#,#sendmessage#,#sendtime#,#sendstate#,#crrstate#)
+	</insert>
+	<update id="update" parameterClass="checkphone">
+		update CHECKPHONE set crrstate=#crrstate# where accountid=#accountid#
+	</update>
+</sqlMap>

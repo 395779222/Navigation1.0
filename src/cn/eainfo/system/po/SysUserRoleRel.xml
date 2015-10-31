@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SysUserRoleRel">
+	<typeAlias alias="sysUserRoleRel"
+		type="cn.eainfo.system.po.SysUserRoleRel" />
+	<select id="selectByRoleId" parameterClass="long"
+		resultClass="sysUserRoleRel">
+		select * from sysUserRoleRel where roleId=#roleId#
+	</select>
+	<select id="selectByUserId" parameterClass="long"
+		resultClass="sysUserRoleRel">
+		select * from sysUserRoleRel where userId=#userId#
+	</select>
+	<insert id="insert" parameterClass="sysUserRoleRel">
+		insert into sysUserRoleRel (roleId,userId) values
+		(#roleId#,#userId#)
+	</insert>
+	<delete id="deleteByRoleId" parameterClass="long">
+		delete from sysUserRoleRel where roleId=#roleId#
+	</delete>
+	<delete id="deleteByUserId" parameterClass="long">
+		delete from sysUserRoleRel where userId=#userId#
+	</delete>
+</sqlMap>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig   
+  PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"   
+  "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" useStatementNamespaces="true"
+		statementCachingEnabled="true" classInfoCacheEnabled="true" />
+	<typeHandler jdbcType="BLOB" javaType="[B"
+		callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+	<typeHandler jdbcType="CLOB" javaType="java.lang.String"
+		callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
+	<sqlMap resource="cn/eainfo/system/po/SysMaxId.xml" />
+	<sqlMap resource="cn/eainfo/system/po/SysUser.xml" />
+	<sqlMap resource="cn/eainfo/system/po/SysMenu.xml" />
+	<sqlMap resource="cn/eainfo/system/po/SysRole.xml" />
+	<sqlMap resource="cn/eainfo/system/po/SysRoleMenuRel.xml" />
+	<sqlMap resource="cn/eainfo/system/po/SysUserRoleRel.xml" />
+	<sqlMap resource="cn/eainfo/system/po/SysArea.xml" />
+	<sqlMap resource="cn/eainfo/spinfo/po/SpInfo.xml" />
+	<sqlMap resource="cn/eainfo/system/po/Checkphone.xml" />
+	<sqlMap resource="cn/eainfo/system/po/LoginLog.xml" />
+	<sqlMap resource="cn/eainfo/navigation/po/Navigation.xml" />
+	<sqlMap resource="cn/eainfo/navigation/po/Shortcuts.xml" />
+	<sqlMap resource="cn/eainfo/navigation/po/Release.xml" />
+	<sqlMap resource="cn/eainfo/navigation/po/CompanyInfo.xml" />
+	<sqlMap resource="cn/eainfo/navigation/po/CustomerInfo.xml" />
+	<sqlMap resource="cn/eainfo/navigation/po/AreaNavCheckMsg.xml" />
+	<sqlMap resource="cn/eainfo/navigation/po/Emergency.xml" />
+</sqlMapConfig>

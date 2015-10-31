@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="/" extends="balance-default" namespace="/">
+		<action name="imgValidateUpload" class="cn.eainfo.system.action.ImgValidateAction">
+			<result type="stream">
+				<param name="contentType">image/jpeg</param>
+				<param name="inputName">upLoadImg</param>
+				<param name="contentDisposition">
+					${contentDisposition}
+				</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="login" class="cn.eainfo.system.action.LoginAction">
+			<result name="input">login.jsp</result>
+			<result name="login" type="redirect">/system/index.jsp</result>
+			 <result name="check" type="redirectAction">checkphone</result>
+		</action>
+		<action name="checkphone" class="cn.eainfo.system.action.CheckphoneAction"
+			method="checkPhone">
+			<result name="input">login.jsp</result>
+			<result name="success">/system/checkPhone.jsp</result>
+			<result name="logSuccess" type="redirect">/system/index.jsp</result>
+		</action>
+		<action name="exit" class="cn.eainfo.system.action.ExitAction">
+			<result name="loginOut" type="redirect">login.jsp</result>
+		</action>
+	</package>
+	<package name="system" extends="balance-default" namespace="/system">
+		<action name="sysMain" class="cn.eainfo.system.action.SysMainAction">
+			<result name="menu">left.jsp</result>
+			<result name="forwordContent">content.jsp</result>
+			<result name="placardContentShow">
+				placardContentShow.jsp
+			</result>
+		</action>
+		<action name="sysUser" class="cn.eainfo.system.action.SysUserAction">
+			<result name="forwordInert">sysUserAdd.jsp</result>
+			<result name="forwordUpdate">sysUserUpdate.jsp</result>
+			<result name="forwordShow">sysUserShow.jsp</result>
+			<result name="forwordList">sysUserList.jsp</result>
+			<result name="forwordUserPassUpad">sysUserPassUpdate.jsp</result>
+			<result name="success" type="redirect">../system/content.jsp</result>
+			</action>
+		<action name="sysMenu" class="cn.eainfo.system.action.SysMenuAction">
+			<result name="forwordInert">sysMenuAdd.jsp</result>
+			<result name="forwordOrder">sysMenuOrder.jsp</result>
+			<result name="forwordUpdate">sysMenuUpdate.jsp</result>
+			<result name="forwordShow">sysMenuShow.jsp</result>
+			<result name="success">sysMenuList.jsp</result>
+			<result name="forwordList">sysMenuList.jsp</result>
+		</action>
+		<action name="sysArea" class="cn.eainfo.system.action.SysAreaAction">
+		</action>
+		<action name="sysRole" class="cn.eainfo.system.action.SysRoleAction">
+			<result name="forwordMenuSet">sysRoleMenuSet.jsp</result>
+			<result name="forwordUserSet">sysRoleUserSet.jsp</result>
+			<result name="forwordUpdate">sysRoleUpdate.jsp</result>
+			<result name="forwordShow">sysRoleShow.jsp</result>
+			<result name="forwordAreaSet">sysRoleAreaSet.jsp</result>
+			<result name="forwordList">sysRoleList.jsp</result>
+		</action>
+
+	</package>
+
+
+	<package name="spinfo" extends="balance-default" namespace="/spinfo">
+		<action name="spInfo" class="cn.eainfo.spinfo.action.SpInfoAction">
+			<result name="forwordUpdate">spInfoUpdate.jsp</result>
+			<result name="forwordShow">spInfoShow.jsp</result>
+			<result name="success">spInfoList.jsp</result>
+		</action>
+		<action name="spInfoExcelDown" class="cn.eainfo.spinfo.action.SpInfoExcelDownAction">
+			<result type="stream">
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="inputName">uploadResult</param>
+				<param name="contentDisposition">${contentDisposition}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="spInfoTXTDown" class="cn.eainfo.spinfo.action.SpInfoTXTDownAction"
+			method="TXTExport">
+			<result name="success">spInfoList.jsp</result>
+		</action>
+	</package>
+	<!-- 导航管理 -->
+	<package name="navigation" extends="balance-default" namespace="/navigation">
+		<action name="navigation" class="cn.eainfo.navigation.action.NavigationAction">
+			<param name="allowedTypes">image/bmp,image/x-png,image/gif,image/pjpeg</param>
+			<result name="forwordList">/navigation/navigationList.jsp</result>
+			<result name="timeOut">/timeout.jsp</result>
+			<result name="navigationMsgCheckList">/navigation/navigationMsgCheckList.jsp</result>
+			 <interceptor-ref name="fileUpload">
+                <!-- 文件过滤 -->
+                <param name="allowedTypes">image/bmp,image/png,image/gif,image/jpeg</param>
+                <!-- 文件大小, 以字节为单位 -->
+                <param name="maximumSize">1025956</param>
+            </interceptor-ref>
+            <!-- 默认拦截器必须放在fileUpload之后，否则无效 -->
+            <interceptor-ref name="defaultStack" />
+        
+		</action>
+		<action name="short" class="cn.eainfo.navigation.action.ShortcutsAction">
+			<result name="forwordList">/navigation/shortList.jsp</result>
+		</action>
+		<action name="release" class="cn.eainfo.navigation.action.ReleaseAction">
+			<result name="forwordList">/navigation/releaseList.jsp</result>
+			<result name="timeout">/timeout.jsp</result>
+		</action>
+		<action name="releaseNavigation" class="cn.eainfo.navigation.action.ReleaseNavigationAction">
+			<result name="preRelease">/navigation/releaseList.jsp</result>
+		</action>
+		<action name="getNavigation" class="cn.eainfo.navigation.action.GetNavigationAction">
+			<result name="hd">/index_hd.jsp</result>
+			<result name="sd">/index_sd.jsp</result>
+			<result name="hdtv">/hdtv.jsp</result>
+			<result name="sdtv">/sdtv.jsp</result>
+			<result name="hdPreLook">/index_hd_preLook.jsp</result>
+			<result name="sdPreLook">/index_sd_preLook.jsp</result>
+
+		</action>
+		<action name="customerInfo" class="cn.eainfo.navigation.action.CustomerInfoAction">
+			<result name="index" type="redirect">/Root/index.jsp?userNameCity=${userCitySession }</result>
+		</action>
+		<action name="companyInfo" class="cn.eainfo.navigation.action.CompanyInfoAction">
+			<result name="forwordList">/navigation/companyInfoList.jsp</result>
+			<result name="timeout">/timeout.jsp</result>
+		</action>
+		<action name="areaNavCheckMsg" class="cn.eainfo.navigation.action.AreaNavCheckMsgAction">
+			<result name="navigationMsgCheckListInit">/navigation/navCheckDetailList.jsp</result>
+		</action>
+		<action name="emergency" class="cn.eainfo.navigation.action.EmergencyAction">
+			<result name="forwordList">/navigation/emergencyList.jsp</result>
+			<result name="timeout">/timeout.jsp</result>
+		</action>
+		
+	</package>
+	
+</struts>

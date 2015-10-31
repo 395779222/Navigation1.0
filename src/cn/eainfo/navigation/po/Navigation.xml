@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="Navigation">
+	<typeAlias alias="navigation" type="cn.eainfo.navigation.po.Navigation" />
+	<typeAlias alias="navigationModel" type="cn.eainfo.navigation.model.NavigationModel" />
+	<typeAlias alias="natest" type="cn.eainfo.navigation.po.Natest" />
+	<select id="getBean" parameterClass="long"
+		resultClass="navigation">
+		SELECT * from navigation where id=#id#
+	</select>
+	<select id="getToCheckNum" resultClass="long" parameterClass="navigation">
+		select count(*) from navigation where areaNo=#areaNo# and type=#type# and state&lt;&gt;'审核通过'
+	</select>
+	<select id="getNotToCheckNum" resultClass="long" parameterClass="navigation">
+		select count(*) from navigation where areaNo=#areaNo# and type=#type# and state='审核通过'
+	</select>
+	 <select id="getNavigationCount" resultClass="long"
+		parameterClass="navigationModel">
+		SELECT count(*) from navigation 
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="namena">
+				(namena like '%$namena$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="num">
+				(num like '%$num$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="type">
+				(type like '%$type$%' )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo in (select areaNo from sysarea where (areaNo=#areaNo# or superArea=#areaNo#)) )
+			</isNotEmpty>
+		</dynamic> 
+ </select>
+	<select id="getNavigationRecord" parameterClass="navigationModel"
+		resultClass="navigation">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from navigation  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="namena">
+				(namena like '%$namena$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="num">
+				(num like '%$num$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="state">
+				(state like '%$state$%') 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="type">
+				(type like '%$type$%' )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo in (select areaNo from sysarea where (areaNo=#areaNo# or superArea=#areaNo#)) )
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+		order by areaNo,updateTime desc,type asc,location
+	</select>
+	<insert id="insert" parameterClass="navigation">
+		insert into navigation
+		  (id,url,location,namena,icon,icon2,num,type,domain,redirect,areaNo,state,updateTime)
+		values
+		(NAVIGATION_SEQ.Nextval,#url#,#location#,#namena#,#icon#,#icon2#,#num#,#type#,#domain#,#redirect#,#areaNo#,#state#,#updateTime#)
+	</insert>
+	<update id="update" parameterClass="navigation">
+		update navigation set
+	  	url=#url#,location=#location#,namena=#namena#,icon=#icon#,icon2=#icon2#,num=#num#,type=#type#,domain=#domain#,redirect=#redirect#,
+	  	state=#state#,areaNo=#areaNo#,checkText=#checkText#,updateTime=#updateTime#
+		where  id=#id#
+	</update>
+	<delete id="delete" parameterClass="long">
+		delete from navigation where id=#id#
+	</delete>
+	<!-- 删除导航后，其他 所在城市导航位置-1且状态变为 待审核-->
+	 <update id="afterDeleteUpdate" parameterClass="navigation">
+		update navigation set location=location-1,state='待审核',updateTime=#updateTime# where location>#location# and areaNo=#areaNo# and type=#type# 
+	</update>
+	<!-- 增加导航后，其他 所在城市导航位置+1且状态变为 待审核-->
+	 <update id="afterAddUpdate" parameterClass="navigation">
+		update navigation set location=location+1,state='待审核',updateTime=#updateTime# where location>=#location# and areaNo=#areaNo# and type=#type# 
+	</update>
+	<!-- 修改导航后（由大位置到小位置），且状态变为 待审核	-->
+	 <update id="afterEditUpdate" parameterClass="navigation">
+		update navigation set location=location+1,state='待审核',updateTime=#updateTime# where #location#>location and location>=#id# and areaNo=#areaNo# and type=#type# 
+	</update>
+	<!-- 修改导航后（由小位置到大位置），
+	且状态变为 待审核-->
+	 <update id="afterEditUpdate2" parameterClass="navigation">
+		update navigation set location=location-1,state='待审核',updateTime=#updateTime# where #id#>=location and location>#location# and areaNo=#areaNo# and type=#type# 
+	</update>
+	<!-- 获取删除后可能会出错导航列表-->
+	<select id="getUpdateIsAbleError" parameterClass="navigation"
+		resultClass="navigation">
+		SELECT * from navigation where (mod(location,15)=0 or mod(location-1,15)=0) and  areaNo=#areaNo# and type=#type# 
+	</select>
+	<!-- 更新删除后所在页面出错导航列表 -->
+	 <update id="afterDeleteIsAbleErrorUpdate" parameterClass="long">
+		update navigation set num=num-1 where id=#updateID# 
+	</update>
+	<select id="getBeanByLocation" parameterClass="navigation" resultClass="navigation">
+		select * from navigation where areaNo=#areaNo# and location=#location# and type=#type# 
+	</select>
+	
+	<!-- 更新增加后所在页面出错导航列表 -->
+	 <update id="afterAddIsAbleErrorUpdate" parameterClass="long">
+		update navigation set num=num+1 where id=#updateID# 
+	</update>
+	<!-- 根据城市中文拼音 获取待发布的导航列表-->
+	<select id="getRealseList"  parameterClass="String" resultClass="navigation">
+		select * from navigation where state='审核通过' or state='已发布'
+	</select>
+	<select id="getNatestByType" parameterClass="String" resultClass="natest">
+		select * from natest where type=#type#
+	</select>
+	<!-- 这里面 areaNo其实就是enName-->
+	<select id="getRealseListByEnNameAndType" parameterClass="navigation" resultClass="navigation">
+		select * from navigation n left join sysArea s on n.areaNo=s.areaNo 
+			where n.type=#type# and s.enname=#areaNo# and (n.state='审核通过' or n.state='已发布') 
+			order by location desc
+	</select>
+	<select id="getExportNavigation" parameterClass="navigationModel" resultClass="java.util.HashMap">
+		select * from navigation where  type=#type# and areaNo=#areaNo#
+	</select>
+	<delete id="deleteNavigationListByAreaNo" parameterClass="navigation">
+		delete from navigation where areaNo=#areaNo# and type=#type#
+	</delete>
+	<update id="updateNavigationByCheck" parameterClass="navigation" >
+		update navigation set state=#state# where areaNo=#areaNo# and type=#type#
+	</update>
+	<select id="getMaxLoactionByAreaAndType" parameterClass="navigation" resultClass="navigation">
+		select location from navigation where  type=#type# and areaNo=#areaNo# and #location#>location order by location desc
+	</select>
+	<select id="getNotPassedNum"  parameterClass="navigation" resultClass="long">
+		select count(*) from navigation where  type=#type# and areaNo=#areaNo# and (state='待审核' or state='保存' or state='审核不通过')
+	</select>
+	<select id="getPreLookList" parameterClass="navigation" resultClass="navigation">
+		select * from navigation where type=#type# and areaNo=#areaNo# order by location desc
+	</select>
+	<select id="getAllNum" parameterClass="navigation" resultClass="long">
+		select count(*) from navigation where type=#type# and areaNo=#areaNo#
+	</select>
+</sqlMap> 

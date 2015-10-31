@@ -1,0 +1,14 @@
+INPUT.button{background:#00ccff url(buttons0411.gif) no-repeat;height:26px;font-size:14px;border:none;color:#000;font-weight:bolder;}
+INPUT.buttonover{background-color:#00eeff;height:26px;font-size:14px;border:none;color:#000;font-weight:bolder;}
+INPUT.btn40 {background-position:-110px -78px;width:40px;}
+INPUT.btn50 {background-position:-100px -52px;width:50px;}
+INPUT.btn60 {background-position:-90px -26px;width:60px;}
+INPUT.btn70 {background-position:-80px 0px;width:70px;}
+INPUT.btn80 {background-position:0 0;width:80px;}
+INPUT.btn90 {background-position:0 -26px;width:90px;}
+INPUT.btn100{background-position:0 -52px;width:100px;}
+INPUT.btn110{background-position:0 -78px;width:110px;}
+INPUT.btn120{background-position:0 -104px;width:120px;}
+INPUT.btn130{background-position:0 -130px;width:130px;}
+INPUT.btn140{background-position:0 -156px;width:140px;}
+INPUT.btn150{background-position:0 -182px;width:150px;}

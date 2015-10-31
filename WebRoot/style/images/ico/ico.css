@@ -1,0 +1,43 @@
+A.edit {background:url(024.gif) no-repeat;line-height:16px;padding-left:18px; height:16px;}
+A.delete {background:url(101.gif) no-repeat;line-height:16px;padding-left:18px; height:16px;}
+A.remove {background:url(096.gif) no-repeat;line-height:16px;padding-left:18px; height:16px;}
+A.plus {background:url(043.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.minus {background:url(084.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.pass {background:url(091.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.nopass {background:url(101.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.save {background:url(045.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.down {background:url(046.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.search {background:url(074.gif) no-repeat;line-height:16px;padding-left:18px;}
+
+A.male {background:url(128.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.female {background:url(129.gif) no-repeat;line-height:16px;padding-left:18px;}
+
+A.export {background:url(129.gif) no-repeat;line-height:16px;padding-left:18px;}
+
+
+A.person {background:url(131.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.personG {background:url(038_1.gif) no-repeat 0 2px;line-height:16px;padding-left:18px;}
+A.personG1 {background:url(037_1.gif) no-repeat;line-height:20px;padding-left:17px;}
+A.repwd {background:url(056_1.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.home {background:url(064.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.group {background:url(037_1.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.exit {background:url(012.gif) no-repeat 0 1px;line-height:20px;padding-left:17px;}
+
+A.paper {background:url(122.gif) no-repeat;line-height:16px;padding-left:18px;}
+
+A.exam {background:url(119.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.appr{background:url(089.gif) no-repeat;line-height:16px;padding-left:18px;}
+A.hand{background:url(hand_point_2.gif) no-repeat top right;line-height:16px;padding-right:18px;}
+
+.icoYes {background:url(091.gif) no-repeat middle right;padding-left:18px;}
+.icoNo {background:url(101.gif) no-repeat middle right;padding-left:18px;}
+
+.icoA {background:url(132.gif) no-repeat middle right;padding-left:18px;}
+.icoB {background:url(133.gif) no-repeat middle right;padding-left:18px;}
+.icoC {background:url(134.gif) no-repeat middle right;padding-left:18px;}
+.icoD {background:url(135.gif) no-repeat middle right;padding-left:18px;}
+
+DIV.OSKtitle {background:url(OKShield.gif) no-repeat 0 0;padding-left:30px;line-height:24px;font-size:18px;}
+DIV.announceTitle {background:url(chinaz8.gif) no-repeat 0 0;padding-left:30px;line-height:24px;font-size:18px;}
+DIV.noticeTitle {background:url(chinaz17.gif) no-repeat 0 0;padding-left:30px;line-height:24px;font-size:18px;}
+DIV.planTitle {background:url(chinaz16.gif) no-repeat 0 0;padding-left:30px;line-height:24px;font-size:18px;}

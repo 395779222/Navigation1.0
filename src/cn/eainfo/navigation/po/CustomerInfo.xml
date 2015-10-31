@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="CustomerInfo">
+	<typeAlias alias="customerInfo" type="cn.eainfo.navigation.po.CustomerInfo" />
+	
+	<typeAlias alias="sysArea" type="cn.eainfo.system.po.SysArea" />
+	<typeAlias alias="customerInfoModel"
+		type="cn.eainfo.navigation.model.CustomerInfoModel" />
+	<select id="getBean" parameterClass="long"
+		resultClass="customerInfo">
+		SELECT * from customerInfo where id=#id#
+	</select>
+	 <select id="getCustomerInfoCount" resultClass="long"
+		parameterClass="customerInfoModel">
+		SELECT count(*) from customerInfo  
+ </select>
+	<select id="getCustomerInfoRecord" parameterClass="customerInfoModel"
+		resultClass="customerInfo">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from SyscustomerInfo  
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	<insert id="insert" parameterClass="customerInfo">
+		insert into syscustomerInfo
+		  (id,districtCode,districtName,areaNo,cardNo)
+		values
+		(SYSCUSTOMERINFO_SEQ.Nextval,#districtCode#,#districtName#,#areaNo#,#cardNo#)
+	</insert>
+	<update id="update" parameterClass="customerInfo">
+		update syscustomerInfo set
+	  districtCode=#districtCode#,districtName=#districtName#,areaNo=#areaNo#,cardNo=#cardNo#
+		where  id=#id#
+	</update>
+	 <select id="getAreaNoByCardNo" parameterClass="String"
+		resultClass="customerInfo">
+		SELECT * from syscustomerInfo where cardNo=#cardNo#
+	</select>
+	<select id="getUserCityNameByDistrictCode" parameterClass="String"
+	      resultClass="sysArea">
+		SELECT * from sysArea sa left join sysCompanyInfo sc on  sa.areaNo=sc.areaNo
+		 where sc.districtCode=#districtCode#
+	</select>
+</sqlMap>

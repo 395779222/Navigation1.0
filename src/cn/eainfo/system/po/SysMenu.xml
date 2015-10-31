@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SysMenu">
+	<typeAlias alias="sysMenu" type="cn.eainfo.system.po.SysMenu" />
+	<typeAlias alias="sysMenuModel" type="cn.eainfo.system.model.SysMenuModel" />
+	<select id="getBean" parameterClass="long" resultClass="sysMenu">
+		SELECT *
+		from sysMenu where moduleId=#moduleId#
+	</select>
+	<select id="getChildMenuNum"  parameterClass="long" resultClass="long">
+		select count(*) from sysMenu where moduleParentId=#moduleId# or moduleId in
+			(select moduleId  from sysMenu  where moduleParentId in(select moduleId  from sysMenu where moduleParentId=#moduleId#)) 
+ 
+	</select>
+	<select id="getBeanbyMenuName" parameterClass="String" resultClass="sysMenu">
+	<![CDATA[
+		SELECT * from sysMenu where moduleName=#moduleName# and moduleParentId=0 
+		]]>
+	</select>
+	<select id="getAll" resultClass="sysMenu">
+		SELECT * from sysMenu order by
+		moduleParentId,orderNumber
+	</select>
+	<insert id="insert" parameterClass="sysMenu">
+		insert into sysMenu
+		(moduleId,moduleParentId,moduleFolder,moduleName,moduleDesc,moduleUri,orderNumber)
+		values
+		(#moduleId#,#moduleParentId#,#moduleFolder#,#moduleName#,#moduleDesc#,#moduleUri#,#orderNumber#)
+	</insert>
+	<update id="update" parameterClass="sysMenu">
+		update sysMenu set
+		moduleParentId=#moduleParentId#,moduleFolder=#moduleFolder#,moduleName=#moduleName#,moduleDesc=#moduleDesc#,moduleUri=#moduleUri#,orderNumber=#orderNumber#
+		where moduleId=#moduleId#
+	</update>
+	<delete id="delete" parameterClass="long">
+		delete from sysMenu where
+		moduleId=#moduleId#
+	</delete>
+	<select id="getMenuChildByUserId" parameterClass="sysMenuModel"
+		resultClass="sysMenu">
+		select * from sysmenu t where
+		t.moduleparentid=#moduleParentId#
+		and t.moduleid in (select menuid from
+		sysrolemenurel where
+		roleid in (select roleid from sysuserrolerel where
+		userid=#userId#)) order by moduleParentId,orderNumber
+	</select>
+	<select id="getByModuleParentId" parameterClass="long"
+		resultClass="sysMenu">
+		select * from sysmenu where
+		moduleParentId=#moduleParentId# order by orderNumber
+	</select>
+
+
+</sqlMap>

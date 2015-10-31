@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SpInfo">
+	<typeAlias alias="spInfo" type="cn.eainfo.spinfo.po.SpInfo" />
+	<typeAlias alias="spInfoModel"
+		type="cn.eainfo.spinfo.model.SpInfoModel" />
+	<select id="getBean" parameterClass="long" resultClass="spInfo">
+		SELECT spId,spName,spcreateTime,princiPal,princiPaltel,contractEffectiveDate,contractExpireDate,csWebsite,status,
+		interfaceName,reMark,spEName,type,AccessNo,companyAddress,descriptionCN,descriptionEN,legalRepresentative,license,
+		princiPalEmail,ProvinceId,roamProperty,ServiceManager,ServiceManagerAddr,ServiceManagerEmail,serviceManagerFax,
+		serviceManagerPC,ServiceManagerTel,SettlementCycle,SettlementPayType,settlementPercent,SPTel from spInfo where spId=#spId#
+	</select>
+	<select id="getAll" resultClass="spInfo">
+		SELECT spId,spName,spcreateTime,princiPal,princiPaltel,contractEffectiveDate,contractExpireDate,csWebsite,status,
+		interfaceName,reMark,spEName,type,AccessNo,companyAddress,descriptionCN,descriptionEN,legalRepresentative,license,
+		princiPalEmail,ProvinceId,roamProperty,ServiceManager,ServiceManagerAddr,ServiceManagerEmail,serviceManagerFax,
+		serviceManagerPC,ServiceManagerTel,SettlementCycle,SettlementPayType,settlementPercent,SPTel from spInfo
+	</select>
+	<select id="getSpIdAndSpName" resultClass="spInfo">
+		SELECT spId,spName from spInfo
+	</select>
+	<select id="getSpInfoCount" resultClass="long"
+		parameterClass="spInfoModel">
+		SELECT count(*) from spInfo
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="spName">
+				(spName like '%$spName$%' )
+			</isNotEmpty>
+			<isNotEqual prepend="AND" property="status"
+				compareValue="-1">
+				(status=#status# )
+			</isNotEqual>
+			<isNotEmpty property="beginDate" prepend="AND">
+			   <![CDATA[
+			    (ContractEffectiveDate >= #beginDate#)  
+                ]]>
+            </isNotEmpty>
+            <isNotEmpty property="endDate" prepend="AND">
+                <![CDATA[
+                 (ContractEffectiveDate <= #endDate#)
+                ]]>
+             </isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getSpInfoRecord" parameterClass="spInfoModel"
+		resultClass="spInfo">
+		select * FROM ( select Table_A.*,rownum as RN FROM (
+		SELECT spId,spName,spcreateTime,princiPal,princiPaltel,contractEffectiveDate,contractExpireDate,csWebsite,status,
+		interfaceName,reMark,spEName,type,AccessNo,companyAddress,descriptionCN,descriptionEN,legalRepresentative,license,
+		princiPalEmail,ProvinceId,roamProperty,ServiceManager,ServiceManagerAddr,ServiceManagerEmail,serviceManagerFax,
+		serviceManagerPC,ServiceManagerTel,SettlementCycle,SettlementPayType,settlementPercent,SPTel from spInfo
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="spName">
+				(spName like '%$spName$%' )
+			</isNotEmpty>
+			<isNotEqual prepend="AND" property="status"
+				compareValue="-1">
+				(status=#status# )
+			</isNotEqual>
+			<isNotEmpty property="beginDate" prepend="AND">
+			   <![CDATA[
+			    (ContractEffectiveDate >= #beginDate#)  
+                ]]>
+            </isNotEmpty>
+            <isNotEmpty property="endDate" prepend="AND">
+                <![CDATA[
+                 (ContractEffectiveDate <= #endDate#)
+                ]]>
+             </isNotEmpty>
+		</dynamic>
+		order by spId
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	
+	<insert id="insert" parameterClass="spInfo">
+		insert into spInfo (spId,spName,spcreateTime,princiPal,princiPaltel,contractEffectiveDate,contractExpireDate,csWebsite,status,interfaceName,reMark,spEName,type,AccessNo,companyAddress,descriptionCN,descriptionEN,legalRepresentative,license,princiPalEmail,ProvinceId,roamProperty,ServiceManager,ServiceManagerAddr,ServiceManagerEmail,serviceManagerFax,serviceManagerPC,ServiceManagerTel,SettlementCycle,SettlementPayType,settlementPercent,SPTel)
+		values(SPINFO_SEQ.NEXTVAL,#spName#,sysdate,#princiPal#,#princiPaltel#,#contractEffectiveDate#,#contractExpireDate#,#csWebsite#,#status#,#interfaceName#,#reMark#,#spEName#,#type#,#accessNo#,#companyAddress#,#descriptionCN#,#descriptionEN#,#princiPal#,#license#,#princiPalEmail#,'8632',#roamProperty#,#princiPal#,#serviceManagerAddr#,#princiPalEmail#,#serviceManagerFax#,#serviceManagerPC#,#princiPaltel#,#settlementCycle#,#settlementPayType#,#settlementPercent#,#princiPaltel#)
+	</insert>
+	<update id="update" parameterClass="spInfo">
+		update spInfo set
+		spName=#spName#,princiPal=#princiPal#,princiPaltel=#princiPaltel#,contractEffectiveDate=#contractEffectiveDate#,
+		contractExpireDate=#contractExpireDate#,csWebsite=#csWebsite#,status=#status#,interfaceName=#interfaceName#,reMark=#reMark#,
+		spEName=#spEName#,type=#type#,AccessNo=#accessNo#,companyAddress=#companyAddress#,descriptionCN=#descriptionCN#,
+		descriptionEN=#descriptionEN#,legalRepresentative=#princiPal#,license=#license#,princiPalEmail=#princiPalEmail#,
+		ProvinceId='8632',roamProperty=#roamProperty#,ServiceManager=#princiPal#,ServiceManagerAddr=#serviceManagerAddr#,
+		ServiceManagerEmail=#princiPalEmail#,serviceManagerFax=#serviceManagerFax#,serviceManagerPC=#serviceManagerPC#,
+		ServiceManagerTel=#princiPaltel#,SettlementCycle=#settlementCycle#,SettlementPayType=#settlementPayType#,settlementPercent=#settlementPercent#,SPTel=#princiPaltel#
+		where spId=#spId#
+	</update>
+
+</sqlMap>

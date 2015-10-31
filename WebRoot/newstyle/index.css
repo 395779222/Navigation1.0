@@ -1,0 +1,362 @@
+/**
+首页样式
+*/
+* {
+	font-size: 14px;
+	font-family: microsoft yahei, arial, simsun;
+}
+
+html,body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	font: 
+}
+
+.layout {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-collapse: collapse;
+}
+
+.layout td {
+	margin: 0;
+	padding: 0;
+}
+
+.head-bg {
+	padding: 0;
+	margin: 0;
+	height: 40px;
+	background: #205081;
+	position: relative;
+}
+
+.head-bg .logo {
+	height: 40px;
+	background: url(images/head-bj.png) no-repeat #205081;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding-left: 375px;
+}
+
+.head-bg .logo  ul {
+	list-style-type: none;
+	margin: 0 0 0 10px;
+	padding: 0;
+	width: 360px;
+}
+
+.head-bg .logo  ul li {
+	float: left;
+	height: 40px;
+}
+
+.head-bg .logo  ul li a {
+	display: block;
+	margin-right: 10px;
+	line-height: 28px;
+	padding: 5px;
+	text-decoration: none;
+	font-size: 16px;
+	color: #FFFFFF;
+	font-family: 黑体;
+}
+
+.head-bg .logo  ul li a:hover,.head-bg .logo  ul li .on {
+	background: #296ca3;
+}
+
+.head-bg .seach-nav {
+	float: right;
+}
+
+.head-bg .seach-nav ul {
+	list-style-type: none;
+	margin: 0 0 0 10px;
+	padding: 0;
+	margin: 0;
+	width: 320px;
+}
+
+.head-bg .seach-nav ul li {
+	float: left;
+	height: 40px;
+}
+
+.head-bg .seach-nav ul li .help {
+	height: 37px;
+	width: 37px;
+	display: block;
+	margin-right: 5px;
+	text-decoration: none;
+	background: url(images/help.png) -40px top no-repeat;
+}
+
+.head-bg .seach-nav ul li .help:hover {
+	background: url(images/help.png) 0 top no-repeat;
+}
+
+.head-bg .seach-nav ul li .userInfo {
+	height: 37px;
+	width: 55px;
+	display: block;
+	margin-right: 5px;
+	text-decoration: none;
+	background: url(images/userInfo.png) -57px top no-repeat;
+}
+
+.head-bg .seach-nav ul li .userInfo-select {
+	background: url(images/userInfo.png) 0 top no-repeat;
+}
+
+.head-bg .seach-nav ul li .userInfo:hover {
+	background: url(images/userInfo.png) 0 top no-repeat;
+}
+
+.head-bg .user-info {
+	position: absolute;
+	top: 40px;
+	right: 5px;
+	background: url(images/userinfo-bj.png) no-repeat;
+	height: 140px;
+	width: 176px;
+}
+
+.head-bg .user-info ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 5px 0 0 0;
+}
+
+.head-bg .user-info ul li {
+	height: 30px;
+	margin: 0 6px;
+}
+
+.head-bg .user-info ul li a {
+	display: block;
+	height: 30px;
+	line-height: 28px;
+	text-decoration: none;
+	font-size: 14px;
+	color: #000;
+	padding-left: 10px;
+}
+
+.head-bg  .user-info  ul li a:hover {
+	background: #296ca3;
+	color: #fff;
+}
+
+.head-bg .seach {
+	height: 14px;
+	border: 1px solid #fff;
+	margin: 10px 10px 5px 15px;
+	color: #999999;
+	width: 120px;
+	font-size: 12px;
+}
+
+.head-bg .seach-button {
+	border: 0;
+	width: 22px;
+	height: 22px;
+	padding-right: 10px;
+	background: url(images/seachButton.png) no-repeat;
+}
+
+.head-bg .seach-button:hover {
+	background: url(images/seachButton.png) 1px 1px no-repeat;
+}
+
+.head-bg  .seach-bj {
+	background: url(images/seach.png) no-repeat 0 6px;
+	width: 190px;
+	padding: 0 5px;
+}
+
+.spit {
+	display: block;
+	width: 7px;
+	height: 297px;
+	background: url(images/spit-bj.png) no-repeat;
+}
+
+.menu-nav {
+	padding-top: 3px;
+	padding-left: 3px;
+	font-size: 12px;
+}
+
+.menuBody {
+	overflow-y: auto;
+	overflow-x: hidden;
+	width: 170px;
+}
+
+.menu-nav  .menu {
+	height: 26px;
+	border: 1px solid #e0e0e0;
+	padding-left: 20px;
+	line-height: 24px;
+	color: #205081;
+	background: url(images/menu_root.gif) 3px 5px no-repeat #e0ecff;
+	cursor: pointer;
+}
+
+.menu-nav ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+.menu-nav ul li {
+	padding: 0;
+	margin: 0;
+	height: 24px;
+}
+
+.menu-nav ul li a {
+	display: block;
+	line-height: 23px;
+	text-decoration: none;
+	margin: 0;
+	padding: 0;
+	color: #205081;
+	font-size: 12px;
+	padding-left: 20px;
+}
+
+.menu-nav ul li a:hover,.menu-nav ul li .on {
+	background: url(images/left_menu_bg.gif) right center no-repeat;
+}
+
+.menu-nav ul li .on {
+	display: block;
+	line-height: 23px;
+	text-decoration: none;
+	margin: 0;
+	padding: 0;
+	color: #205081;
+	font-size: 12px;
+	padding-left: 20px;
+	background: url(images/left_menu_bg.gif) right center no-repeat;
+}
+
+/**登录页面**/
+.login-container {
+	width: 550px;
+	text-align: left;
+}
+
+.login-container .login-title {
+	height: 30px;
+	background: #205081;
+	color: #fff;
+	font-weight: bold;
+	line-height: 30px;
+	padding-left: 15px;
+}
+
+.login-container .login-content {
+	border: 1px solid #e0e0e0;
+	background: #f9f9f9;
+}
+
+.login-container .error {
+	border: 1px solid #d04437;
+	margin: 15px;
+	color: #333;
+	background: url(images/icon-error.png) 10px 12px no-repeat
+		rgb(255, 231, 231);
+	height: 40px;
+	line-height: 40px;
+	padding-left: 40px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.login-container .login-form {
+	width: 360px;
+	margin: 20px;
+	padding-left: 30px;
+}
+
+.login-container .login-form td{
+	line-height: 36px;
+	font-weight: bold;
+	font-size: 14px;
+	height: 38px;
+}
+
+.login-container ul {
+	margin: 15px;
+	list-style-type: none;
+}
+
+.login-container ul li {
+	line-height: 40px;
+	font-weight: bold;
+	font-size: 14px;
+	height: 42px;
+}
+
+.login-container  .input {
+	height: 24px;
+	line-height:24px;
+	border: 1px solid #e0e0e0;
+	padding-left: 5px;
+	marging-top: 3px;
+}
+
+.login-container .button {
+	background: rgb(242, 242, 242);
+	margin: 0px;
+	padding: 4px 10px;
+	border-radius: 3.01px;
+	border: 1px solid rgb(204, 204, 204);
+	height: 2.14em;
+	color: rgb(51, 51, 51);
+	line-height: 1.4285;
+	font-family: sans-serif;
+	font-size: 14px;
+	font-variant: normal;
+	font-weight: normal;
+	text-decoration: none;
+	vertical-align: baseline;
+	display: inline-block;
+	white-space: nowrap;
+	cursor: pointer;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	text-shadow: 0 1px 0 white;
+	width: 80px;
+}
+
+.bottom-logo {
+	background: #f5f5f5;
+	border: 1px solid #e0e0e0;
+	color: #707070;
+}
+
+.menu .flex {
+	display: bolck;
+	float: right;
+	margin-right: 8px;
+	margin-top: 4px;
+	cursor: pointer;
+	width: 17px;
+	height: 17px;
+	background: url(images/flex-bj.png) #e0ecff;
+}
+
+.menu .flexon {
+	background: url(images/flex-bj.png) 16px 16px #e0ecff;
+}

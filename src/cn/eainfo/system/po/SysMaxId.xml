@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SysMaxId">
+	<typeAlias alias="sysMaxId" type="cn.eainfo.system.po.SysMaxId" />
+	<select id="getBean" parameterClass="String"
+		resultClass="sysMaxId">
+		SELECT * from sysMaxId where fieldName=#fieldName#
+	</select>
+	<insert id="insert" parameterClass="sysMaxId">
+		insert into sysMaxId (fieldName,maxValue) values
+		(#fieldName#,#maxValue#)
+	</insert>
+	<update id="update" parameterClass="sysMaxId">
+		update sysMaxId set maxValue=#maxValue# where
+		fieldName=#fieldName#
+	</update>
+
+</sqlMap>

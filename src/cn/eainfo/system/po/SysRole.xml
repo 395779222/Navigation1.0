@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SysRole">
+	<typeAlias alias="sysRole" type="cn.eainfo.system.po.SysRole" />
+	<typeAlias alias="sysRoleModel"
+		type="cn.eainfo.system.model.SysRoleModel" />
+	<select id="getBean" parameterClass="long" resultClass="sysRole">
+		SELECT * from sysRole where roleId=#roleId#
+	</select>
+	<select id="getAll" resultClass="sysRole">
+		SELECT * from sysRole 
+	</select>
+	<select id="checkRole" resultClass="sysRole" parameterClass="String">
+		SELECT * from sysRole where roleName=#roleName#
+	</select>
+	<select id="getSysRoleCount" resultClass="long"
+		parameterClass="sysRoleModel">
+		SELECT count(*) from sysRole
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="roleName">
+				(roleName like '%$roleName$%' )
+			</isNotEmpty>
+			<isNotEqual prepend="AND" property="isSystem"
+				compareValue="0">
+				(isSystem=#isSystem# )
+			</isNotEqual>
+			<isNotEqual prepend="AND" property="status" compareValue="0">
+				(status=#status# )
+			</isNotEqual>
+			
+		</dynamic>
+	</select>
+	<select id="getSysRoleRecord" parameterClass="sysRoleModel"
+		resultClass="sysRole">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from sysRole
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="roleName">
+				(roleName like '%$roleName$%' )
+			</isNotEmpty>
+			<isNotEqual prepend="AND" property="isSystem"
+				compareValue="0">
+				(isSystem=#isSystem# )
+			</isNotEqual>
+			<isNotEqual prepend="AND" property="status" compareValue="0">
+				(status=#status# )
+			</isNotEqual>
+		</dynamic>
+		order by roleId
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	<insert id="insert" parameterClass="sysRole">
+		insert into sysRole (roleId,roleName,roleDesc,isSystem,status)
+		values (#roleId#,#roleName#,#roleDesc#,#isSystem#,#status#)
+	</insert>
+	<update id="update" parameterClass="sysRole">
+		update sysRole set
+		roleName=#roleName#,roleDesc=#roleDesc#,isSystem=#isSystem#,status=#status#
+		where roleId=#roleId#
+	</update>
+
+</sqlMap>

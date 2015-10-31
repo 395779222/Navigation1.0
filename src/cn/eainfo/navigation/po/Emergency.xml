@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="Emergency">
+	<typeAlias alias="emergency" type="cn.eainfo.navigation.po.Emergency" />
+	<typeAlias alias="emergencyModel"
+		type="cn.eainfo.navigation.model.EmergencyModel" />
+	<select id="getBean" parameterClass="long"
+		resultClass="emergency">
+		SELECT * from emergency where id=#id#
+	</select>
+	 <select id="getEmergencyCount" resultClass="long"
+		parameterClass="emergencyModel">
+		SELECT count(*) from emergency  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="type">
+				(type like '%$type$%' )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '%$areaNo$%' )
+			</isNotEmpty>
+		</dynamic> 
+ </select>
+	<select id="getEmergencyRecord" parameterClass="emergencyModel"
+		resultClass="emergency">
+		select * FROM ( select Table_A.*,rownum as RN FROM ( SELECT *
+		from emergency  
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="type">
+				(type like '%$type$%' )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="areaNo">
+				(areaNo like '%$areaNo$%' )
+			</isNotEmpty>
+		</dynamic> 
+		<![CDATA[) Table_A WHERE ROWNUM <= #end# ]]>
+		) Table_B
+		<![CDATA[ WHERE  RN > #start#  ]]>
+	</select>
+	<insert id="insert" parameterClass="emergency">
+		insert into emergency
+		  (id,areaNo,type,emergenceyRedirect)
+		values
+		(EMERGENCY_SEQ.Nextval,#areaNo#,#type#,#emergenceyRedirect#)
+	</insert>
+	<update id="update" parameterClass="emergency">
+		update emergency set
+	  areaNo=#areaNo#,type=#type#,emergenceyRedirect=#emergenceyRedirect#
+		where  id=#id#
+	</update>
+	 <select id="getBeanByTypeAndAreaNo" parameterClass="emergencyModel" resultClass="emergency">
+	 	select * from emergency where areaNo=#areaNo# and type=#type#
+	 </select>
+	<delete id="delete" parameterClass="long">
+		delete from emergency where id=#id#
+	</delete>
+</sqlMap>

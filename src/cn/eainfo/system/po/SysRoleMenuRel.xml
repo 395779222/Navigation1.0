@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SysRoleMenuRel">
+	<typeAlias alias="sysRoleMenuRel"
+		type="cn.eainfo.system.po.SysRoleMenuRel" />
+	<select id="selectByRoleId" parameterClass="long"
+		resultClass="sysRoleMenuRel">
+		select * from sysRoleMenuRel where roleId=#roleId#
+	</select>
+	<select id="selectByMenuId" parameterClass="long"
+		resultClass="sysRoleMenuRel">
+		select * from sysRoleMenuRel where menuId=#menuId#
+	</select>
+	<insert id="insert" parameterClass="sysRoleMenuRel">
+		insert into sysRoleMenuRel (roleId,menuId) values
+		(#roleId#,#menuId#)
+	</insert>
+	<delete id="deleteByRoleId" parameterClass="long">
+		delete from sysRoleMenuRel where roleId=#roleId#
+	</delete>
+	<delete id="deleteByMenuId" parameterClass="long">
+		delete from sysRoleMenuRel where menuId=#menuId#
+	</delete>
+</sqlMap>
